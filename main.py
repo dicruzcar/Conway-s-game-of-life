@@ -9,7 +9,7 @@ if __name__ == "__main__":
         option = input("Execute on console or gui? (c/g) :")
         option = option.upper()
         if option == "G":
-            GUI(base_unit = 4)
+            GUI(base_unit = 5)
             print("Bye")
         elif option == "C":
             LifeGame(80, 10)

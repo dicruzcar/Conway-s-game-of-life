@@ -1,11 +1,11 @@
 import pygame
-import sys
+import sys, copy
 from lifegame import LifeGame
 
 
 class GUI():
 
-    def __init__(self, width=600, height=600, base_unit=5, cps = 5):
+    def __init__(self, width=600, height=600, base_unit=5, cps = 30):
 
         self.height = height
         self.width = width
@@ -15,6 +15,7 @@ class GUI():
         self.cps = cps
         self.cells = []
         self.pause = True
+        self.day = 0
 
         self.game = LifeGame(
             int(self.width/self.base_unit),
@@ -31,11 +32,12 @@ class GUI():
 
     def main(self):
         pygame.init()
-        pygame.display.set_caption("Juego de la vida")
+        pygame.display.set_caption(f"Conway's game of life - day {self.day}")
 
         clock = pygame.time.Clock()
 
-        while True:            
+        while True:
+            pygame.display.set_caption(f"Conway's game of life - day {self.day}")
             for eventos in pygame.event.get():
                 if eventos.type == pygame.QUIT:
                     sys.exit(0)
@@ -44,25 +46,25 @@ class GUI():
                     for y, row in enumerate(self.cells):
                         for x, cell in enumerate(row):
                             if cell.collidepoint(position):
-                                print("OLD", self.game.world_buffer[y][x]==1)
                                 if self.game.world[y][x] == 1:
                                     self.game.world[y][x] = 0
                                     self.game.world_buffer[y][x] = 0
                                 elif self.game.world[y][x] == 0:
                                     self.game.world[y][x] = 1
                                     self.game.world_buffer[y][x] = 1
-                                """ print("OLD", self.game.world_buffer[y][x])
-                                self.game.world[y][x] = 1 if self.game.world[y][x] == 1 else 0
-                                self.game.world_buffer[y][x] = 1 if self.game.world_buffer[y][x] == 1 else 0
-                                print("NEW", self.game.world_buffer[y][x]) """
-                                print("NEW", self.game.world_buffer[y][x])
                                 self.pause = True
-                if eventos.type == pygame.KEYDOWN:
-                    self.pause = True
+                                self.day = 0
+                                
+                if eventos.type == pygame.K_SPACE:
+                    self.pause = not self.pause
+
+                if eventos.type == pygame.K_BACKSPACE:
+                    self.game.clear_world()
             
             # print("hi")
             if not self.pause:
                 self.gui_cycle()
+                self.day += 1
             else:
                 self.paint()
 
@@ -73,10 +75,10 @@ class GUI():
 
 
     def gui_cycle(self):
-        self.paint()
         # game.print_world()
         self.game.check_world()
-        self.game.world_buffer = self.game.world.copy()
+        self.game.world_buffer = copy.deepcopy(self.game.world)
+        self.paint()
 
 
     def paint(self):
