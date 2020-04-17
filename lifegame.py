@@ -126,6 +126,7 @@ class LifeGame():
 
     def clear_world(self):
         self.world = [ 
-                        [ 0 for inx in range(width)]
-                        for iny in range(height)
+                        [ 0 for inx in range(self.width)]
+                        for iny in range(self.height)
                     ]
+        self.world_buffer = copy.deepcopy(self.world)

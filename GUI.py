@@ -55,11 +55,14 @@ class GUI():
                                 self.pause = True
                                 self.day = 0
                                 
-                if eventos.type == pygame.K_SPACE:
-                    self.pause = not self.pause
+                if eventos.type == pygame.KEYDOWN:
+                    if eventos.key == pygame.K_SPACE:
+                        self.pause = not self.pause
 
-                if eventos.type == pygame.K_BACKSPACE:
-                    self.game.clear_world()
+                    if eventos.key == pygame.K_BACKSPACE:
+                        self.game.clear_world()
+                        self.pause = True
+                        self.day = 0
             
             # print("hi")
             if not self.pause:
