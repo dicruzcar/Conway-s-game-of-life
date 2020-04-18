@@ -20,6 +20,8 @@ Tested in python 3.7.6
 
 ### In the program
 
+#### GUI
+
 Into the program yo can select the cells (squares) that you want to put, all the black cells are dead, the white are alive.
 
 To start the simulation press the <kbd>SPACE</kbd> key, also its toggle the state of the simulation, between pause and play.
@@ -29,6 +31,14 @@ The <kbd>BACKWARD</kbd> key resets the world and stops the simulation.
 Also making click in one cell while the simulation is running will pause it.
 
 On the program title will be a counter of the days(steps) that has been passed since the start of the simulation, they will reset if you clear the world.
+
+#### Console
+
+The console mode its different from the GUI mode, it puts randomly the alive cells and starts the simulation.
+
+By the moment only can be stopped by killing the procces, and dont have all the funtionalities of the GUI mode.
+
+Its planned for this model be improved over the time.
 
 ## Modules and Libraries
 
