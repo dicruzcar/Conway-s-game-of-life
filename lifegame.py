@@ -11,7 +11,10 @@ class LifeGame():
                     ] 
         self.width = width
         self.height = height
-        self.cells = 0
+        if gui:
+            self.cells = 0
+        else:
+            self.cells = random.randint(int((width*height)/20), int((width*height)/20))
         self.gui = gui
         self.world_buffer = copy.deepcopy(self.world)
 
