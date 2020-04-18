@@ -33,6 +33,8 @@ On the program title will be a counter of the days(steps) that has been passed s
 ## Modules and Libraries
 
 This program uses the modules sys, copy, time and random from python.
+
 For the GUI module it makes use of pygame 1.9.6.
 
+## Suggestions
 Any suggestion or commentary about the program it's appreciated.
