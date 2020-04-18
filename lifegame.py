@@ -11,7 +11,6 @@ class LifeGame():
                     ] 
         self.width = width
         self.height = height
-        #self.cells = random.randint(int((width*height)/20), int((width*height)/20))
         self.cells = 0
         self.gui = gui
         self.world_buffer = copy.deepcopy(self.world)
@@ -56,7 +55,7 @@ class LifeGame():
         for y,row in enumerate(self.world_buffer):
             for x,cell in enumerate(row):
 
-                #Limites sin contar esquinas
+                #Limits without corners
 
                 if (y == 0) and (x > 0 and x < self.width - 1):
                     self.check_state((x,y), [
@@ -75,7 +74,7 @@ class LifeGame():
                         (x,y-1), (x, y+1), (x-1,y-1),(x-1, y),(x-1, y+1), 
                     ])
                 
-                #Esquinas
+                #Corners
 
                 elif(x == self.width -1) and (y == self.height-1):
                     self.check_state((x,y), [
@@ -94,7 +93,7 @@ class LifeGame():
                         (x+1, y), (x+1, y+1), (x, y+1) 
                     ])
 
-                #Regular
+                #Stardard
 
                 else:
                     self.check_state((x,y), [

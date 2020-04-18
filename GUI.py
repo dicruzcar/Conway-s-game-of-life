@@ -32,16 +32,17 @@ class GUI():
 
     def main(self):
         pygame.init()
-        pygame.display.set_caption(f"Conway's game of life - day {self.day}")
+        pygame.display.set_caption(f"Conway's game of life")
 
         clock = pygame.time.Clock()
 
         while True:
             pygame.display.set_caption(f"Conway's game of life - day {self.day}")
-            for eventos in pygame.event.get():
-                if eventos.type == pygame.QUIT:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
                     sys.exit(0)
-                if eventos.type == pygame.MOUSEBUTTONDOWN and eventos.button == 1:
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    #if click cell, then changes the status of the cell
                     position = pygame.mouse.get_pos()
                     for y, row in enumerate(self.cells):
                         for x, cell in enumerate(row):
@@ -55,16 +56,16 @@ class GUI():
                                 self.pause = True
                                 self.day = 0
                                 
-                if eventos.type == pygame.KEYDOWN:
-                    if eventos.key == pygame.K_SPACE:
+                if event.type == pygame.KEYDOWN:
+                    #If SPACE pause
+                    if event.key == pygame.K_SPACE:
                         self.pause = not self.pause
-
-                    if eventos.key == pygame.K_BACKSPACE:
+                    #if BACKSPACE resets and pause
+                    if event.key == pygame.K_BACKSPACE:
                         self.game.clear_world()
                         self.pause = True
                         self.day = 0
             
-            # print("hi")
             if not self.pause:
                 self.gui_cycle()
                 self.day += 1
@@ -78,8 +79,8 @@ class GUI():
 
 
     def gui_cycle(self):
-        # game.print_world()
         self.game.check_world()
+        #A world buffer to contrast the world with the buffer and make the changes in the world
         self.game.world_buffer = copy.deepcopy(self.game.world)
         self.paint()
 
