@@ -2,6 +2,8 @@ import random
 import time
 import copy
 
+#Available axis values: "x" and "y"
+
 class LifeGame():
 
     def __init__(self, width, height, gui = False):
@@ -53,57 +55,101 @@ class LifeGame():
             self.world[pos[1]][pos[0]] = 1
         elif (self.world_buffer[pos[1]][pos[0]] == 1) and ((counter != 2) and (counter != 3)):
             self.world[pos[1]][pos[0]] = 0
+
+    def __which_edge(self, index, axis):
+        end_edge = self.__get_edge_by_axis(axis)
+        return index if (index == 0 or index == end_edge) else -1
+    
+    def __get_edge_by_axis(self, axis):
+        #Be Careful, this returns the edge based on count starting at zero, so you never get index out of bounds
+        #Valid axis: "x" and "y", otherwise will raise an error
+        if(axis != "x" and axis != "y"):
+            raise ValueError("Axis value not defined")
+        response = self.width - 1
+        if (axis == "y"): response = self.height - 1
+        return response
+    
+    def get_neighborhood(self, x, y):
+        neighborhood = []
+        x_edge = self.__which_edge(x, "x")
+        y_edge = self.__which_edge(y, "y")
+
+        if(x_edge == 0): 
+            if (y_edge == 0):
+                neighborhood = [
+                                (x+1, y),
+                    (x, y+1),   (x+1, y+1),     
+
+                ]
+            
+            if (y_edge < 0):
+                neighborhood = [
+                    (x, y-1),   (x+1, y-1),
+                                (x+1, y),
+                    (x, y+1),   (x+1, y+1),
+                ]
+
+            if (y_edge > 0):
+                neighborhood = [
+
+                    (x, y-1),   (x+1, y-1),
+                                (x+1, y),
+                ]
+
+        if(x_edge < 0):
+            if (y_edge == 0):
+                neighborhood = [
+                    (x-1,y),                (x+1, y),
+                    (x-1,y+1),  (x, y+1),   (x+1, y+1),
+
+                ]
+
+            if (y_edge < 0):
+                neighborhood = [
+                    (x-1,y-1),  (x, y-1),   (x+1, y-1),
+                    (x-1,y),                (x+1, y),
+                    (x-1,y+1),   (x, y+1),   (x+1, y+1),
+            ]
+
+            if (y_edge > 0):
+                neighborhood = [
+
+                    (x-1,y-1),  (x, y-1),   (x+1, y-1),
+                    (x-1,y),                (x+1, y),
+                ]
+
+        if(x_edge > 0):
+            if (y_edge == 0):
+                neighborhood = [
+                                (x-1,y),
+                                (x-1,y+1),  (x, y+1),
+
+                ]
+
+            if (y_edge < 0):
+                neighborhood = [
+                                (x-1,y-1),  (x, y-1),
+                                (x-1,y),
+                                (x-1,y+1),  (x, y+1),
+                ]
+
+            if (y_edge > 0):
+                neighborhood = [
+
+                                (x-1,y-1),  (x, y-1),
+                                (x-1,y),
+                ]
+
+        return neighborhood
+
     
     def check_world(self):
         for y,row in enumerate(self.world_buffer):
-            for x,cell in enumerate(row):
-
-                #Limits without corners
-
-                if (y == 0) and (x > 0 and x < self.width - 1):
-                    self.check_state((x,y), [
-                        (x-1,y), (x+1, y), (x-1,y+1),(x, y+1),(x+1, y+1), 
-                    ])
-                elif(y == self.height - 1) and (x > 0 and x < self.width - 1):
-                    self.check_state((x,y), [
-                        (x-1,y), (x+1, y), (x-1,y-1),(x, y-1),(x+1, y-1), 
-                    ])
-                elif(x == 0) and (y > 0 and y < self.height - 1):
-                    self.check_state((x,y), [
-                        (x,y-1), (x, y+1), (x+1,y-1),(x+1, y),(x+1, y+1), 
-                    ])
-                elif(x == self.width-1) and (y > 0 and y < self.height - 1):
-                    self.check_state((x,y), [
-                        (x,y-1), (x, y+1), (x-1,y-1),(x-1, y),(x-1, y+1), 
-                    ])
-                
-                #Corners
-
-                elif(x == self.width -1) and (y == self.height-1):
-                    self.check_state((x,y), [
-                        (x-1, y), (x-1, y-1), (x, y-1) 
-                    ])
-                elif(x == 0) and (y == self.height-1):
-                    self.check_state((x,y), [
-                        (x+1, y), (x+1, y-1), (x, y-1) 
-                    ])
-                elif(x == self.width - 1) and (y == 0):
-                    self.check_state((x,y), [
-                        (x-1, y), (x-1, y+1), (x, y+1) 
-                    ])
-                elif(x == 0) and (y == 0):
-                    self.check_state((x,y), [
-                        (x+1, y), (x+1, y+1), (x, y+1) 
-                    ])
-
-                #Stardard
-
-                else:
-                    self.check_state((x,y), [
-                        (x-1, y), (x+1, y), 
-                        (x-1, y+1), (x, y+1), (x+1, y+1),
-                        (x-1, y-1), (x, y-1), (x+1, y-1),
-                    ])
+            for x,_ in enumerate(row):
+                self.check_state(
+                    (x,y), 
+                    self.get_neighborhood(x,y)
+                )
 
     def print_world(self):
         for row in self.world:
