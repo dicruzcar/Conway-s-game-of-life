@@ -44,7 +44,7 @@ This model it's planned for improvement over time.
 
 This program uses the modules sys, copy, time and random from python.
 
-For the GUI module it makes use of pygame 1.9.6.
+For the GUI module it makes use of pygame 2.6.1.
 
 ## Suggestions
 Any suggestion or commentary about the program it's appreciated.
