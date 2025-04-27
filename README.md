@@ -3,7 +3,7 @@ This is my python implementation of John Horton Conway's game of life, I hope yo
 
 The program needs optimization, due it makes a lot of operations with arrays that can be unecessary at all, at the moment it seems work as is expected, but any bug or error that you found please, let me know. 
 
-Tested in python 3.12.9
+Tested in python 3.12.9 and pygame 2.6.1
 
 ## How to use:
 
