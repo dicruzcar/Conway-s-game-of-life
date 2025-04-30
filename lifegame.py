@@ -19,6 +19,8 @@ class LifeGame():
             self.cells = random.randint(int((width*height)/20), int((width*height)/20))
         self.gui = gui
         self.world_buffer = copy.deepcopy(self.world)
+        self.active_cells = set()
+        self.active_cells_copy = set()
 
         for i in range(self.cells):
             pos = self.get_random_position(self.width, self.height)
@@ -53,8 +55,10 @@ class LifeGame():
 
         if (self.world_buffer[pos[1]][pos[0]] == 0) and counter == 3:
             self.world[pos[1]][pos[0]] = 1
+            self.active_cells.add(pos)
         elif (self.world_buffer[pos[1]][pos[0]] == 1) and ((counter != 2) and (counter != 3)):
             self.world[pos[1]][pos[0]] = 0
+            self.active_cells.remove(pos)
 
     def __which_edge(self, index, axis):
         end_edge = self.__get_edge_by_axis(axis)
@@ -144,12 +148,18 @@ class LifeGame():
 
     
     def check_world(self):
-        for y,row in enumerate(self.world_buffer):
-            for x,_ in enumerate(row):
-                self.check_state(
-                    (x,y), 
-                    self.get_neighborhood(x,y)
-                )
+        for x,y in self.active_cells_copy:
+            neighborhood = self.get_neighborhood(x,y)
+            self.check_state(
+                (x,y), 
+                neighborhood
+            )
+            for neighbor in neighborhood:
+                if neighbor not in self.active_cells_copy:
+                    self.check_state(
+                        neighbor, 
+                        self.get_neighborhood(neighbor[0], neighbor[1])
+                    )
 
     def print_world(self):
         for row in self.world:
@@ -166,6 +176,7 @@ class LifeGame():
         self.print_world()
         self.check_world()
         self.world_buffer = copy.deepcopy(self.world)
+        self.active_cells_copy = copy.deepcopy(self.active_cells)
 
     def game_cycle(self):
         while(True):
@@ -178,3 +189,5 @@ class LifeGame():
                         for iny in range(self.height)
                     ]
         self.world_buffer = copy.deepcopy(self.world)
+        self.active_cells = set()
+        self.active_cells_copy = set()

@@ -1,6 +1,7 @@
 import pygame
 import sys, copy
 from lifegame import LifeGame
+from premade_worlds import PremadeWorlds
 
 
 class GUI():
@@ -18,8 +19,7 @@ class GUI():
         self.day = 0
 
         self.game = LifeGame(
-            int(self.width/self.base_unit),
-            int(self.height/self.base_unit),
+            *self.get_dimension(),
             True
         )
         self.window = pygame.display.set_mode((
@@ -27,6 +27,9 @@ class GUI():
             self.height
         ))
 
+        self.premade_worlds = None
+        
+        self.test_mode = False
         self.main()
 
 
@@ -50,9 +53,13 @@ class GUI():
                                 if self.game.world[y][x] == 1:
                                     self.game.world[y][x] = 0
                                     self.game.world_buffer[y][x] = 0
+                                    self.game.active_cells.remove((x, y))
+                                    self.game.active_cells_copy.remove((x, y))
                                 elif self.game.world[y][x] == 0:
                                     self.game.world[y][x] = 1
                                     self.game.world_buffer[y][x] = 1
+                                    self.game.active_cells.add((x, y))
+                                    self.game.active_cells_copy.add((x, y))
                                 self.pause = True
                                 self.day = 0
                                 
@@ -65,7 +72,24 @@ class GUI():
                         self.game.clear_world()
                         self.pause = True
                         self.day = 0
-            
+                    if event.key == pygame.K_UP:
+                        self.scale_cps(2)
+                    if event.key == pygame.K_DOWN:
+                        self.scale_cps(0.5)
+                    if event.key == pygame.K_t:
+                        self.test_mode = not self.test_mode                    
+                    if self.test_mode:
+                        if event.key == pygame.K_1:
+                            Test = PremadeWorlds()
+                            Test.test_1(self.game.world, self.game.active_cells)
+                            self.game.world_buffer = copy.deepcopy(self.game.world)
+                            self.game.active_cells_copy = copy.deepcopy(self.game.active_cells)
+                        if event.key == pygame.K_2:
+                            Test = PremadeWorlds()
+                            Test.pulsar(self.game.world, self.game.active_cells, 20, 20)
+                            self.game.world_buffer = copy.deepcopy(self.game.world)
+                            self.game.active_cells_copy = copy.deepcopy(self.game.active_cells)
+
             if not self.pause:
                 self.gui_cycle()
                 self.day += 1
@@ -82,6 +106,7 @@ class GUI():
         self.game.check_world()
         #A world buffer to contrast the world with the buffer and make the changes in the world
         self.game.world_buffer = copy.deepcopy(self.game.world)
+        self.game.active_cells_copy = copy.deepcopy(self.game.active_cells)
         self.paint()
 
 
@@ -102,6 +127,13 @@ class GUI():
                     # print("alive")
                     pygame.draw.rect(self.window, self.black, self.cells[y][x])
 
+    def get_dimension(self):
+        return (int(self.width/self.base_unit), int(self.height/self.base_unit))
+    
+    def scale_cps(self, scalar):
+        value = self.cps*scalar
+        if value > 1 and value < 144:
+            self.cps = value
 
 if __name__ == "__main__":
     GUI()
