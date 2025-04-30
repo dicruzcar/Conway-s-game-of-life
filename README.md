@@ -32,6 +32,21 @@ Also making click in one cell while the simulation is running will pause it.
 
 On the program title will be a counter of the days(steps) that has been passed since the start of the simulation, they will reset if you clear the world.
 
+##### Test Mode
+
+You can start test mode by pressing the <kbd>T</kbd> key and then <kbd>1</kbd> or <kbd>2</kbd>.  
+Pressing <kbd>1</kbd> will load a simple cyclic structure (I wasn’t able to find its name, if you know it, let me know).  
+The <kbd>2</kbd> key will load a **Pulsar**:
+
+![Pulsar, Conway's Game of Life](https://upload.wikimedia.org/wikipedia/commons/0/07/Game_of_life_pulsar.gif)
+
+After the world loads, you can use the game normally.
+
+##### FPS Control
+
+<kbd>↑</kbd> doubles the FPS, up to a maximum of 144 FPS (120 might be enough, due to current frame rate multiples).  
+<kbd>↓</kbd> halves the FPS, down to a minimum of 1 FPS.
+
 #### Console
 
 The console mode it's different from the GUI mode, it puts randomly the alive cells and starts the simulation.
