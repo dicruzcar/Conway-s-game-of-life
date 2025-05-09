@@ -3,17 +3,17 @@
 class PremadeWorlds():
     def __init__(self):
         pass
-    def test_1(self, world, active_cells):
+    def test_1(self, world, active_cells, px, py):
     
-        world[5][5] = 1
-        world[4][5] = 1
-        world[3][5] = 1
-        world[4][6] = 1
+        world[py+1][px-1] = 1
+        world[py][px-1] = 1
+        world[py-1][px-1] = 1
+        world[py][px] = 1
 
-        active_cells.add((5, 5))
-        active_cells.add((5, 4))
-        active_cells.add((5, 3))
-        active_cells.add((6, 4))
+        active_cells.add((px-1, py+1))
+        active_cells.add((px-1, py))
+        active_cells.add((px-1, py-1))
+        active_cells.add((px, py))
     
     def pulsar(self, world, active_cells, px, py): 
         self.__base_pulsar(world, active_cells, px, py, 1, 1)

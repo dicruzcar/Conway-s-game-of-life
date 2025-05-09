@@ -81,12 +81,13 @@ class GUI():
                     if self.test_mode:
                         if event.key == pygame.K_1:
                             Test = PremadeWorlds()
-                            Test.test_1(self.game.world, self.game.active_cells)
+                            Test.test_1(self.game.world, self.game.active_cells, *self.get_mouse_pos_in_game())
                             self.game.world_buffer = copy.deepcopy(self.game.world)
                             self.game.active_cells_copy = copy.deepcopy(self.game.active_cells)
                         if event.key == pygame.K_2:
+                            
                             Test = PremadeWorlds()
-                            Test.pulsar(self.game.world, self.game.active_cells, 20, 20)
+                            Test.pulsar(self.game.world, self.game.active_cells, *self.get_mouse_pos_in_game())
                             self.game.world_buffer = copy.deepcopy(self.game.world)
                             self.game.active_cells_copy = copy.deepcopy(self.game.active_cells)
 
@@ -134,6 +135,9 @@ class GUI():
         value = self.cps*scalar
         if value > 1 and value < 144:
             self.cps = value
+    def get_mouse_pos_in_game(self):
+        mouse_pos = pygame.mouse.get_pos()
+        return (mouse_pos[0]//self.base_unit, mouse_pos[1]//self.base_unit)
 
 if __name__ == "__main__":
     GUI()
