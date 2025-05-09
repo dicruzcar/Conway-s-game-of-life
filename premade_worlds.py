@@ -5,15 +5,10 @@ class PremadeWorlds():
         pass
     def test_1(self, world, active_cells, px, py):
     
-        world[py+1][px-1] = 1
-        world[py][px-1] = 1
-        world[py-1][px-1] = 1
-        world[py][px] = 1
-
-        active_cells.add((px-1, py+1))
-        active_cells.add((px-1, py))
-        active_cells.add((px-1, py-1))
-        active_cells.add((px, py))
+        self.set_cell(world, active_cells, px-1, py+1, 1)
+        self.set_cell(world, active_cells, px-1, py, 1)
+        self.set_cell(world, active_cells, px-1, py-1, 1)
+        self.set_cell(world, active_cells, px, py, 1)
     
     def pulsar(self, world, active_cells, px, py): 
         self.__base_pulsar(world, active_cells, px, py, 1, 1)
@@ -58,17 +53,28 @@ class PremadeWorlds():
     def __base_3_point_line(self, world, active_cells, px, py, orientation, mirroring = 1):
         mirroring = -mirroring
         if orientation == "v":
-            world[py][px] = 1
-            world[py+(1*mirroring)][px] = 1
-            world[py+(2*mirroring)][px] = 1
-            active_cells.add((px, py))
-            active_cells.add((px, py+(1*mirroring)))
-            active_cells.add((px, py+(2*mirroring)))
+            self.set_cell(world, active_cells, px, py, 1)
+            self.set_cell(world, active_cells, px, py+(1*mirroring), 1)
+            self.set_cell(world, active_cells, px, py+(2*mirroring), 1)
         elif orientation == "h":
-            world[py][px] = 1
-            world[py][px+(1*mirroring)] = 1
-            world[py][px+(2*mirroring)] = 1
-            active_cells.add((px, py))
-            active_cells.add((px+(1*mirroring), py))
-            active_cells.add((px+(2*mirroring), py))
+            self.set_cell(world, active_cells, px, py, 1)
+            self.set_cell(world, active_cells, px+(1*mirroring), py, 1)
+            self.set_cell(world, active_cells, px+(2*mirroring), py, 1)
         return (world, active_cells)
+    
+    def set_cell(self, world, active_cells, px, py, value):
+        max_x = len(world[0])
+        max_y = len(world)
+
+        if px < 0  or px >= max_x:
+            return
+        if py < 0 or py >= max_y:
+            return
+        
+        world[py][px] = value
+
+        if value == 0 and (px, py) in active_cells:
+            active_cells.discard((px, py))
+        if value == 1:
+            active_cells.add((px, py))
+        
