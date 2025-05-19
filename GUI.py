@@ -76,6 +76,13 @@ class GUI():
                         self.scale_cps(2)
                     if event.key == pygame.K_DOWN:
                         self.scale_cps(0.5)
+                    if event.key == pygame.K_m:
+                        if self.game.world_mode == "normal":
+                            self.game.world_mode = "torus"
+                            print("Torus world activated")
+                        elif self.game.world_mode == "torus":
+                            self.game.world_mode = "normal"
+                            print("Normal world activated")
                     if event.key == pygame.K_t:
                         self.test_mode = not self.test_mode                    
                     if self.test_mode:
