@@ -1,7 +1,8 @@
 # Conway-s-game-of-life
 This is my python implementation of John Horton Conway's game of life, I hope you find it useful.
 
-The program needs optimization, due it makes a lot of operations with arrays that can be unecessary at all, at the moment it seems work as is expected, but any bug or error that you found please, let me know. 
+The game has been optimized, but there’s still work to do and likely optimizations I'm not yet aware of.  
+Any feedback or suggestions on this topic are welcome.
 
 Tested in python 3.12.9 and pygame 2.6.1
 
@@ -18,7 +19,7 @@ Tested in python 3.12.9 and pygame 2.6.1
 5. Open the main.py file "python3 main.py"
 6. Enjoy!
 
-### In the program
+### In the game
 
 #### GUI
 
@@ -47,7 +48,16 @@ After the world loads, you can use the game normally.
 <kbd>↑</kbd> doubles the FPS, up to a maximum of 144 FPS (120 might be enough, due to current frame rate multiples).  
 <kbd>↓</kbd> halves the FPS, down to a minimum of 1 FPS.
 
+#### World Modes
+
+Currently, there are two available modes: **normal** and **torus**.
+
+- **Normal mode**: The world has fixed edges. Cells outside the grid boundaries are ignored when calculating the next state.
+- **Torus mode**: The world wraps around like a torus. Cells at the edges consider opposite-edge cells as neighbors, creating a continuous space.
+
 #### Console
+
+**⚠️ This mode has not been tested or updated to support recent changes and may not work as expected. A reimplementation is planned, as the current version had poor performance and was not displayed correctly the last time it was tested (a few years ago...)**
 
 The console mode it's different from the GUI mode, it puts randomly the alive cells and starts the simulation.
 
