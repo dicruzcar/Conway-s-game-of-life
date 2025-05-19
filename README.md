@@ -50,7 +50,7 @@ After the world loads, you can use the game normally.
 
 #### World Modes
 
-Currently, there are two available modes: **normal** and **torus**.
+Currently, there are two available by pressing <kbd>m<kbd>: **normal** and **torus**.
 
 - **Normal mode**: The world has fixed edges. Cells outside the grid boundaries are ignored when calculating the next state.
 - **Torus mode**: The world wraps around like a torus. Cells at the edges consider opposite-edge cells as neighbors, creating a continuous space.
