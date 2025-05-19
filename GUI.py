@@ -14,9 +14,13 @@ class GUI():
         self.white = (0, 0, 0)
         self.black = (255, 255, 255)
         self.cps = cps
+        self.pause_CPS = 30
         self.cells = []
         self.pause = True
         self.day = 0
+        self.clock = pygame.time.Clock()
+
+        self.window_caption = f"Conway's game of life"
 
         self.game = LifeGame(
             *self.get_dimension(),
@@ -35,17 +39,16 @@ class GUI():
 
     def main(self):
         pygame.init()
-        pygame.display.set_caption(f"Conway's game of life")
-
-        clock = pygame.time.Clock()
+        pygame.display.set_caption(self.window_caption)
 
         while True:
-            pygame.display.set_caption(f"Conway's game of life - day {self.day}")
+            pygame.display.set_caption(f"{self.window_caption} - day {self.day}")
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit(0)
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     #if click cell, then changes the status of the cell
+                    self.set_pause(True)
                     position = pygame.mouse.get_pos()
                     for y, row in enumerate(self.cells):
                         for x, cell in enumerate(row):
@@ -60,17 +63,16 @@ class GUI():
                                     self.game.world_buffer[y][x] = 1
                                     self.game.active_cells.add((x, y))
                                     self.game.active_cells_copy.add((x, y))
-                                self.pause = True
                                 self.day = 0
                                 
                 if event.type == pygame.KEYDOWN:
                     #If SPACE pause
                     if event.key == pygame.K_SPACE:
-                        self.pause = not self.pause
+                        self.set_pause(not self.pause)
                     #if BACKSPACE resets and pause
                     if event.key == pygame.K_BACKSPACE:
                         self.game.clear_world()
-                        self.pause = True
+                        self.set_pause(True)
                         self.day = 0
                     if event.key == pygame.K_UP:
                         self.scale_cps(2)
@@ -106,7 +108,7 @@ class GUI():
 
 
             pygame.display.update()
-            clock.tick(self.cps)
+            self.clock_manager()
         return 0
 
 
@@ -140,8 +142,24 @@ class GUI():
     
     def scale_cps(self, scalar):
         value = self.cps*scalar
-        if value > 1 and value < 144:
+        if value > 1  and value < 144:
             self.cps = value
+
+    def set_pause(self, pause:bool = True):
+        self.pause = pause
+        if self.pause:
+            self.window_caption = "Conway's game of life (PAUSED)"
+            self.clock_manager()
+        else:
+            self.window_caption = "Conway's game of life"
+            self.clock_manager()
+    
+    def clock_manager(self):
+        if self.pause:
+            self.clock.tick(self.pause_CPS)
+        else:
+            self.clock.tick(self.cps)
+    
     def get_mouse_pos_in_game(self):
         mouse_pos = pygame.mouse.get_pos()
         return (mouse_pos[0]//self.base_unit, mouse_pos[1]//self.base_unit)
